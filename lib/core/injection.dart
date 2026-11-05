@@ -2,6 +2,7 @@ import 'package:flutter_application_1/repository/films_repository.dart';
 import 'package:flutter_application_1/repository/person_repository.dart';
 import 'package:flutter_application_1/repository/planet_repository.dart';
 import 'package:flutter_application_1/service/api_client.dart';
+import 'package:flutter_application_1/service/auth_service.dart';
 import 'package:flutter_application_1/service/films_service.dart';
 import 'package:flutter_application_1/service/person_service.dart';
 import 'package:flutter_application_1/service/planet_service.dart';
@@ -26,4 +27,6 @@ void setupDependencies() {
   getIt.registerLazySingleton<PlanetService>(() => PlanetService(getIt<ApiClient>()));
   getIt.registerLazySingleton<PlanetRepository>(() => PlanetRepository(getIt<PlanetService>()));
   getIt.registerFactory<PlanetStore>(() => PlanetStore(getIt<PlanetRepository>()));
+
+  getIt.registerLazySingleton<AuthService>(() => AuthService());
 }

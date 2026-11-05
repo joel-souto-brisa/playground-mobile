@@ -3,15 +3,23 @@ import 'package:flutter_application_1/views/films_view.dart';
 import 'package:flutter_application_1/core/injection.dart';
 import 'package:flutter_application_1/views/person_view.dart';
 import 'package:flutter_application_1/views/planet_view.dart';
+import 'views/login_view.dart';
+import 'service/auth_service.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   setupDependencies();
-  runApp(const MyApp());
+
+  final authService = getIt<AuthService>(); 
+  final bool isLoggedIn = await authService.isUserLoggedIn();
+
+  runApp(MyApp(isLoggedIn: isLoggedIn));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final bool isLoggedIn;
+
+  const MyApp({super.key, required this.isLoggedIn});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +29,8 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MainNavigation(),
+      debugShowCheckedModeBanner: false,
+      home: isLoggedIn ? const MainNavigation() : const LoginView(),
     );
   }
 }
@@ -38,9 +47,55 @@ class _MainNavigationState extends State<MainNavigation> {
 
   final List<Widget> _pages = const [PersonView(), PlanetView(), FilmsView()];
 
+  Future<void> _handleLogout() async {
+    final authService = getIt<AuthService>();
+    await authService.logout();
+
+    if (!mounted) return;
+
+    Navigator.pushAndRemoveUntil(
+      context, 
+      MaterialPageRoute(
+        builder: (context) => const LoginView()),
+        (route) => false
+        );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Star Wars Wiki'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            tooltip: 'Sair',
+            onPressed: () {
+              // Diálogo de confirmação opcional
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: const Text('Sair da conta'),
+                  content: const Text('Deseja realmente encerrar a sessão?'),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: const Text('Cancelar'),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context); // Fecha o modal
+                        _handleLogout();        // Realiza o logout
+                      },
+                      child: const Text('Sair', style: TextStyle(color: Colors.red)),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        ],
+      ),
       body: IndexedStack(index: _selectedIndex, children: _pages),
       bottomNavigationBar: NavigationBar(
         selectedIndex: _selectedIndex,
