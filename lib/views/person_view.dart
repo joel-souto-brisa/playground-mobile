@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/core/injection.dart';
 import 'package:flutter_application_1/stores/person_store.dart';
 import 'package:flutter_application_1/widgets/favorite_button.dart';
+import 'package:flutter_application_1/widgets/galactic_header.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
 class PersonView extends StatefulWidget {
@@ -51,7 +52,16 @@ class _PersonViewState extends State<PersonView> {
             return const Center(child: Text('Nenhum personagem encontrado'));
           }
 
-          return GridView.builder(
+          return Column(
+            children: [
+              const GalacticHeader(
+                title: 'Personagens',
+                subtitle: 'Heróis, vilões e habitantes da galáxia.',
+                icon: Icons.people_alt_outlined,
+                eyebrow: 'DOSSIÊ DE PERSONAGENS',
+              ),
+              Expanded(
+                child: GridView.builder(
             padding: const EdgeInsets.all(12),
             gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
               maxCrossAxisExtent: 260,
@@ -72,7 +82,8 @@ class _PersonViewState extends State<PersonView> {
                       Row(
                         children: [
                           CircleAvatar(
-                            backgroundColor: Colors.orange.shade100,
+                            backgroundColor: const Color(0xFF303A49),
+                            foregroundColor: const Color(0xFFFFD54F),
                             child: Text(
                               person.name.isNotEmpty
                                   ? person.name[0].toUpperCase()
@@ -100,12 +111,14 @@ class _PersonViewState extends State<PersonView> {
                       const SizedBox(height: 12),
                       Text(
                         'Gênero: ${person.gender}',
+                        style: const TextStyle(color: Color(0xFFD0D8E2)),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
                       const SizedBox(height: 4),
                       Text(
                         'Nascimento: ${person.birthYear}',
+                        style: const TextStyle(color: Color(0xFFD0D8E2)),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -118,7 +131,10 @@ class _PersonViewState extends State<PersonView> {
                   ),
                 ),
               );
-            },
+                },
+              ),
+              ),
+            ],
           );
         },
       ),

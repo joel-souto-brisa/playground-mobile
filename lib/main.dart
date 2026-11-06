@@ -31,8 +31,55 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: "Star Wars",
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color(0xFFFFD54F),
+          brightness: Brightness.dark,
+        ),
         useMaterial3: true,
+        scaffoldBackgroundColor: const Color(0xFF080D17),
+        textTheme: ThemeData.dark().textTheme.apply(
+          bodyColor: const Color(0xFFE7ECF2),
+          displayColor: Colors.white,
+        ),
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Color(0xFF101722),
+          foregroundColor: Colors.white,
+          centerTitle: false,
+        ),
+        listTileTheme: const ListTileThemeData(
+          textColor: Color(0xFFF4F6F8),
+          subtitleTextStyle: TextStyle(color: Color(0xFFD0D8E2)),
+          iconColor: Color(0xFFFFD54F),
+        ),
+        navigationBarTheme: NavigationBarThemeData(
+          backgroundColor: const Color(0xFF101722),
+          indicatorColor: const Color(0x33FFD54F),
+          labelTextStyle: WidgetStateProperty.resolveWith((states) {
+            final selected = states.contains(WidgetState.selected);
+            return TextStyle(
+              color: selected
+                  ? const Color(0xFFFFD54F)
+                  : const Color(0xFFD0D8E2),
+              fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
+            );
+          }),
+          iconTheme: WidgetStateProperty.resolveWith((states) {
+            final selected = states.contains(WidgetState.selected);
+            return IconThemeData(
+              color: selected
+                  ? const Color(0xFFFFD54F)
+                  : const Color(0xFFD0D8E2),
+            );
+          }),
+        ),
+        cardTheme: CardThemeData(
+          color: const Color(0xFF121B28),
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+            side: BorderSide(color: Colors.white.withValues(alpha: 0.08)),
+          ),
+        ),
       ),
       debugShowCheckedModeBanner: false,
       home: isLoggedIn ? const MainNavigation() : const LoginView(),
@@ -88,7 +135,14 @@ class _MainNavigationState extends State<MainNavigation> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Star Wars Wiki'),
+        title: const Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.auto_awesome, color: Color(0xFFFFD54F), size: 20),
+            SizedBox(width: 10),
+            Text('STAR WARS WIKI'),
+          ],
+        ),
         actions: [
           IconButton(
             icon: const Icon(Icons.logout),

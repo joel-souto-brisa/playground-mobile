@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/core/injection.dart';
 import 'package:flutter_application_1/stores/planet_store.dart';
 import 'package:flutter_application_1/widgets/favorite_button.dart';
+import 'package:flutter_application_1/widgets/galactic_header.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
 class PlanetView extends StatefulWidget {
@@ -51,7 +52,16 @@ class _PlanetViewState extends State<PlanetView> {
             return const Center(child: Text('Nenhum planeta encontrado'));
           }
 
-          return GridView.builder(
+          return Column(
+            children: [
+              const GalacticHeader(
+                title: 'Planetas',
+                subtitle: 'Descubra mundos de todos os cantos do universo.',
+                icon: Icons.public,
+                eyebrow: 'MAPA DA GALÁXIA',
+              ),
+              Expanded(
+                child: GridView.builder(
             padding: const EdgeInsets.all(12),
             gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
               maxCrossAxisExtent: 260,
@@ -72,7 +82,8 @@ class _PlanetViewState extends State<PlanetView> {
                       Row(
                         children: [
                           CircleAvatar(
-                            backgroundColor: Colors.blue.shade100,
+                            backgroundColor: const Color(0xFF303A49),
+                            foregroundColor: const Color(0xFFFFD54F),
                             child: Text(
                               planet.name.isNotEmpty
                                   ? planet.name[0].toUpperCase()
@@ -100,12 +111,14 @@ class _PlanetViewState extends State<PlanetView> {
                       const SizedBox(height: 12),
                       Text(
                         'Clima: ${planet.climate}',
+                        style: const TextStyle(color: Color(0xFFD0D8E2)),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
                       const SizedBox(height: 4),
                       Text(
                         'População: ${planet.population}',
+                        style: const TextStyle(color: Color(0xFFD0D8E2)),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -118,7 +131,10 @@ class _PlanetViewState extends State<PlanetView> {
                   ),
                 ),
               );
-            },
+                },
+              ),
+              ),
+            ],
           );
         },
       ),

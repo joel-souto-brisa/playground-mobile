@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/core/injection.dart';
 import 'package:flutter_application_1/stores/films_store.dart';
 import 'package:flutter_application_1/widgets/favorite_button.dart';
+import 'package:flutter_application_1/widgets/galactic_header.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
 class FilmsView extends StatefulWidget {
@@ -53,15 +54,25 @@ class _FilmsViewState extends State<FilmsView> {
 
           return ListView.separated(
             padding: const EdgeInsets.all(12),
-            itemCount: _store.films.length,
+            itemCount: _store.films.length + 1,
             separatorBuilder: (context, index) => const SizedBox(height: 8),
             itemBuilder: (context, index) {
-              final film = _store.films[index];
+              if (index == 0) {
+                return const GalacticHeader(
+                  title: 'Filmes',
+                  subtitle: 'Reviva as sagas que marcaram a galáxia.',
+                  icon: Icons.movie_outlined,
+                  eyebrow: 'HOLOCRON CINEMATOGRÁFICO',
+                );
+              }
+
+              final film = _store.films[index - 1];
 
               return Card(
                 child: ListTile(
                   leading: CircleAvatar(
-                    backgroundColor: Colors.blueGrey.shade100,
+                    backgroundColor: const Color(0x1AFFD54F),
+                    foregroundColor: const Color(0xFFFFD54F),
                     child: Text(
                       'E${film.episodeId}',
                       style: const TextStyle(fontWeight: FontWeight.bold),
@@ -73,6 +84,7 @@ class _FilmsViewState extends State<FilmsView> {
                   ),
                   subtitle: Text(
                     'Diretor: ${film.director}\nLançamento: ${film.releaseDate}',
+                    style: const TextStyle(color: Color(0xFFD0D8E2)),
                   ),
                   isThreeLine: true,
                   trailing: FavoriteButton(

@@ -40,7 +40,7 @@ class _FavoriteButtonState extends State<FavoriteButton> {
     return IconButton(
       icon: Icon(
         _isFav ? Icons.favorite : Icons.favorite_border,
-        color: _isFav ? Colors.red : Colors.grey,
+        color: _isFav ? const Color(0xFFFFD54F) : const Color(0xFFB8C2D0),
       ),
       tooltip: _isFav ? 'Remover dos favoritos' : 'Favoritar',
       onPressed: _toggle,
