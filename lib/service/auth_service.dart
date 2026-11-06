@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthService {
   static const String _sessionkey = "isLoggedIn";
+  static const String _currentUserKey = "current_user_email";
   static const String _userskey = "registered_users";
 
   Future<void> doRegister(String email, String password) async {
@@ -33,9 +34,15 @@ class AuthService {
 
     if (users.containsKey(email) && users[email] == password){
       await prefs.setBool(_sessionkey, true);
+      await prefs.setString(_currentUserKey, email);
     } else {
       throw Exception('E-mail ou senha inválidos.');
     }
+  }
+
+  Future<String?> getCurrentUser() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(_currentUserKey);
   }
 
   Future<bool> isUserLoggedIn() async {
@@ -46,5 +53,6 @@ class AuthService {
   Future<void> logout() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(_sessionkey);
+    await prefs.remove(_currentUserKey);
   }
 }

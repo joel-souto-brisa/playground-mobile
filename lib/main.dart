@@ -1,8 +1,13 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/views/films_view.dart';
 import 'package:flutter_application_1/core/injection.dart';
+import 'package:flutter_application_1/stores/favorite_store.dart';
+import 'package:flutter_application_1/views/favorite_view.dart';
 import 'package:flutter_application_1/views/person_view.dart';
 import 'package:flutter_application_1/views/planet_view.dart';
+
 import 'views/login_view.dart';
 import 'service/auth_service.dart';
 
@@ -10,7 +15,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   setupDependencies();
 
-  final authService = getIt<AuthService>(); 
+  final authService = getIt<AuthService>();
   final bool isLoggedIn = await authService.isUserLoggedIn();
 
   runApp(MyApp(isLoggedIn: isLoggedIn));
@@ -44,8 +49,27 @@ class MainNavigation extends StatefulWidget {
 
 class _MainNavigationState extends State<MainNavigation> {
   int _selectedIndex = 0;
+  late final FavoriteStore _favoriteStore;
+  late final List<Widget> _pages;
 
-  final List<Widget> _pages = const [PersonView(), PlanetView(), FilmsView()];
+  @override
+  void initState() {
+    super.initState();
+    _favoriteStore = getIt<FavoriteStore>();
+    _pages = [
+      const PersonView(),
+      const PlanetView(),
+      const FilmsView(),
+      FavoriteView(store: _favoriteStore),
+    ];
+  }
+
+  void _selectTab(int index) {
+    setState(() => _selectedIndex = index);
+    if (index == 3) {
+      unawaited(_favoriteStore.loadFavorites());
+    }
+  }
 
   Future<void> _handleLogout() async {
     final authService = getIt<AuthService>();
@@ -54,11 +78,10 @@ class _MainNavigationState extends State<MainNavigation> {
     if (!mounted) return;
 
     Navigator.pushAndRemoveUntil(
-      context, 
-      MaterialPageRoute(
-        builder: (context) => const LoginView()),
-        (route) => false
-        );
+      context,
+      MaterialPageRoute(builder: (context) => const LoginView()),
+      (route) => false,
+    );
   }
 
   @override
@@ -85,9 +108,12 @@ class _MainNavigationState extends State<MainNavigation> {
                     TextButton(
                       onPressed: () {
                         Navigator.pop(context); // Fecha o modal
-                        _handleLogout();        // Realiza o logout
+                        _handleLogout(); // Realiza o logout
                       },
-                      child: const Text('Sair', style: TextStyle(color: Colors.red)),
+                      child: const Text(
+                        'Sair',
+                        style: TextStyle(color: Colors.red),
+                      ),
                     ),
                   ],
                 ),
@@ -99,9 +125,7 @@ class _MainNavigationState extends State<MainNavigation> {
       body: IndexedStack(index: _selectedIndex, children: _pages),
       bottomNavigationBar: NavigationBar(
         selectedIndex: _selectedIndex,
-        onDestinationSelected: (index) {
-          setState(() => _selectedIndex = index);
-        },
+        onDestinationSelected: _selectTab,
         destinations: const [
           NavigationDestination(
             icon: Icon(Icons.people_outline),
@@ -117,6 +141,11 @@ class _MainNavigationState extends State<MainNavigation> {
             icon: Icon(Icons.movie_outlined),
             selectedIcon: Icon(Icons.movie),
             label: 'Filmes',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.favorite_outline),
+            selectedIcon: Icon(Icons.favorite),
+            label: 'Favoritos',
           ),
         ],
       ),

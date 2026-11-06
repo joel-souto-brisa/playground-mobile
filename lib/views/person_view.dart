@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/core/injection.dart';
 import 'package:flutter_application_1/stores/person_store.dart';
+import 'package:flutter_application_1/widgets/favorite_button.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
 class PersonView extends StatefulWidget {
@@ -89,6 +90,10 @@ class _PersonViewState extends State<PersonView> {
                               overflow: TextOverflow.ellipsis,
                               style: Theme.of(context).textTheme.titleMedium,
                             ),
+                          ),
+                          FavoriteButton(
+                            key: ValueKey('person:${person.name}'),
+                            itemId: 'person:${person.name}',
                           ),
                         ],
                       ),

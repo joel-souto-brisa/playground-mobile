@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/core/injection.dart';
 import 'package:flutter_application_1/stores/planet_store.dart';
+import 'package:flutter_application_1/widgets/favorite_button.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
 class PlanetView extends StatefulWidget {
@@ -89,6 +90,10 @@ class _PlanetViewState extends State<PlanetView> {
                               overflow: TextOverflow.ellipsis,
                               style: Theme.of(context).textTheme.titleMedium,
                             ),
+                          ),
+                          FavoriteButton(
+                            key: ValueKey('planet:${planet.name}'),
+                            itemId: 'planet:${planet.name}',
                           ),
                         ],
                       ),
