@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/app_routes.dart';
 import 'package:flutter_application_1/views/films_view.dart';
 import 'package:flutter_application_1/core/injection.dart';
 import 'package:flutter_application_1/stores/favorite_store.dart';
@@ -9,6 +10,7 @@ import 'package:flutter_application_1/views/person_view.dart';
 import 'package:flutter_application_1/views/planet_view.dart';
 
 import 'views/login_view.dart';
+import 'views/register_view.dart';
 import 'service/auth_service.dart';
 
 void main() async {
@@ -82,7 +84,12 @@ class MyApp extends StatelessWidget {
         ),
       ),
       debugShowCheckedModeBanner: false,
-      home: isLoggedIn ? const MainNavigation() : const LoginView(),
+      initialRoute: isLoggedIn ? AppRoutes.main : AppRoutes.login,
+      routes: {
+        AppRoutes.login: (context) => const LoginView(),
+        AppRoutes.register: (context) => const RegisterView(),
+        AppRoutes.main: (context) => const MainNavigation(),
+      },
     );
   }
 }
@@ -124,11 +131,7 @@ class _MainNavigationState extends State<MainNavigation> {
 
     if (!mounted) return;
 
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(builder: (context) => const LoginView()),
-      (route) => false,
-    );
+    Navigator.pushNamedAndRemoveUntil(context, AppRoutes.login, (route) => false);
   }
 
   @override

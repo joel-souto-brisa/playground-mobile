@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/app_routes.dart';
 import 'package:flutter_application_1/core/injection.dart';
-import 'package:flutter_application_1/main.dart'; // Onde está o MainNavigation
 import 'package:flutter_application_1/service/auth_service.dart';
-import 'package:flutter_application_1/views/register_view.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -40,10 +39,7 @@ class _LoginViewState extends State<LoginView> {
 
       if (!mounted) return;
 
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const MainNavigation()),
-      );
+      Navigator.pushReplacementNamed(context, AppRoutes.main);
     } catch (e) {
       if (!mounted) return;
 
@@ -281,12 +277,9 @@ class _LoginViewState extends State<LoginView> {
                               const SizedBox(height: 16),
                               TextButton(
                                 onPressed: () {
-                                  Navigator.push(
+                                  Navigator.pushNamed(
                                     context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          const RegisterView(),
-                                    ),
+                                    AppRoutes.register,
                                   );
                                 },
                                 child: const Text(
