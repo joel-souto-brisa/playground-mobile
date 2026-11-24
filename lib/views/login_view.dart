@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/app_routes.dart';
 import 'package:flutter_application_1/core/injection.dart';
-import 'package:flutter_application_1/service/auth_service.dart';
+import 'package:flutter_application_1/stores/auth_store.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -14,9 +15,8 @@ class _LoginViewState extends State<LoginView> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  final _authService = getIt<AuthService>();
+  final _authStore = getIt<AuthStore>();
 
-  bool _isLoading = false;
   bool _obscurePassword = true;
 
   @override
@@ -29,30 +29,20 @@ class _LoginViewState extends State<LoginView> {
   Future<void> _handleLogin() async {
     if (!_formKey.currentState!.validate()) return;
 
-    setState(() => _isLoading = true);
-
-    try {
-      await _authService.doLogin(
-        _emailController.text.trim(),
-        _passwordController.text,
-      );
-
+    final success = await _authStore.login(
+      _emailController.text.trim(),
+      _passwordController.text,
+    );
+    if (success) {
       if (!mounted) return;
-
       Navigator.pushReplacementNamed(context, AppRoutes.main);
-    } catch (e) {
-      if (!mounted) return;
-
+    } else if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(e.toString().replaceAll('Exception: ', '')),
+          content: Text(_authStore.errorMessage ?? 'Não foi possível entrar.'),
           backgroundColor: Colors.redAccent,
         ),
       );
-    } finally {
-      if (mounted) {
-        setState(() => _isLoading = false);
-      }
     }
   }
 
@@ -206,7 +196,7 @@ class _LoginViewState extends State<LoginView> {
                                 obscureText: _obscurePassword,
                                 textInputAction: TextInputAction.done,
                                 onFieldSubmitted: (_) {
-                                  if (!_isLoading) _handleLogin();
+                                  if (!_authStore.isLoading) _handleLogin();
                                 },
                                 style: const TextStyle(color: Colors.white),
                                 decoration:
@@ -240,37 +230,45 @@ class _LoginViewState extends State<LoginView> {
                                 },
                               ),
                               const SizedBox(height: 24),
-                              FilledButton.icon(
-                                onPressed: _isLoading ? null : _handleLogin,
-                                icon: _isLoading
-                                    ? const SizedBox(
-                                        width: 18,
-                                        height: 18,
-                                        child: CircularProgressIndicator(
-                                          strokeWidth: 2,
-                                          color: Color(0xFF11151D),
+                              Observer(
+                                builder: (_) => FilledButton.icon(
+                                  onPressed: _authStore.isLoading
+                                      ? null
+                                      : _handleLogin,
+                                  icon: _authStore.isLoading
+                                      ? const SizedBox(
+                                          width: 18,
+                                          height: 18,
+                                          child: CircularProgressIndicator(
+                                            strokeWidth: 2,
+                                            color: Color(0xFF11151D),
+                                          ),
+                                        )
+                                      : const Icon(
+                                          Icons.rocket_launch_outlined,
                                         ),
-                                      )
-                                    : const Icon(Icons.rocket_launch_outlined),
-                                label: Text(
-                                  _isLoading ? 'Conectando...' : 'Entrar',
-                                  style: const TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
+                                  label: Text(
+                                    _authStore.isLoading
+                                        ? 'Conectando...'
+                                        : 'Entrar',
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
-                                ),
-                                style: FilledButton.styleFrom(
-                                  foregroundColor: const Color(0xFF11151D),
-                                  backgroundColor: const Color(0xFFFFD54F),
-                                  disabledBackgroundColor: const Color(
-                                    0xFFFFD54F,
-                                  ),
-                                  disabledForegroundColor: const Color(
-                                    0xFF11151D,
-                                  ),
-                                  minimumSize: const Size.fromHeight(54),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(14),
+                                  style: FilledButton.styleFrom(
+                                    foregroundColor: const Color(0xFF11151D),
+                                    backgroundColor: const Color(0xFFFFD54F),
+                                    disabledBackgroundColor: const Color(
+                                      0xFFFFD54F,
+                                    ),
+                                    disabledForegroundColor: const Color(
+                                      0xFF11151D,
+                                    ),
+                                    minimumSize: const Size.fromHeight(54),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(14),
+                                    ),
                                   ),
                                 ),
                               ),

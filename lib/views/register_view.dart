@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/service/auth_service.dart';
+import 'package:flutter_application_1/core/injection.dart';
+import 'package:flutter_application_1/stores/auth_store.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 
 class RegisterView extends StatefulWidget{
   const RegisterView({super.key});
@@ -14,8 +16,7 @@ class _RegisterViewState extends State<RegisterView> {
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
 
-  final _authService = AuthService(); 
-  bool _isLoading = false;
+  final _authStore = getIt<AuthStore>();
 
   @override
   void dispose() {
@@ -28,36 +29,26 @@ class _RegisterViewState extends State<RegisterView> {
   Future<void> _handlerRegister() async {
     if (!_formKey.currentState!.validate()) return;
 
-    setState(() => _isLoading = true);
-
-    try {
-      await _authService.doRegister(_emailController.text.trim(), _passwordController.text);
-    
+    final success = await _authStore.register(
+      _emailController.text.trim(),
+      _passwordController.text,
+    );
+    if (success) {
       if (!mounted) return;
-
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text("Usuário criado com sucesso! Faça login para continuar."),
           backgroundColor: Colors.green,
         )
       );
-
       Navigator.pop(context);
-    } catch (e) {
-      if (!mounted) return;
-
+    } else if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(e.toString().replaceAll("Exception: ", "")),
-        backgroundColor: Colors.redAccent,
-        )
-    );
-    } finally {
-      if (mounted) {
-        setState(() { 
-          _isLoading = false;
-        });
-      }
+        SnackBar(
+          content: Text(_authStore.errorMessage ?? 'Não foi possível cadastrar.'),
+          backgroundColor: Colors.redAccent,
+        ),
+      );
     }
   }
 
@@ -122,16 +113,26 @@ class _RegisterViewState extends State<RegisterView> {
                     },
                   ),
                   const SizedBox(height: 24),
-                  FilledButton(
-                    onPressed: _isLoading ? null : _handlerRegister,
-                    style: FilledButton.styleFrom(padding: const EdgeInsets.symmetric(vertical: 16)),
-                    child: _isLoading 
-                        ? const SizedBox(
-                          height: 20,
-                          width: 20,
-                          child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
-                        )
-                        : const Text("Cadastrar", style: TextStyle(fontSize: 16)),
+                  Observer(
+                    builder: (_) => FilledButton(
+                      onPressed: _authStore.isLoading ? null : _handlerRegister,
+                      style: FilledButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                      ),
+                      child: _authStore.isLoading
+                          ? const SizedBox(
+                              height: 20,
+                              width: 20,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: Colors.white,
+                              ),
+                            )
+                          : const Text(
+                              "Cadastrar",
+                              style: TextStyle(fontSize: 16),
+                            ),
+                    ),
                   ),
                 ],
               ),

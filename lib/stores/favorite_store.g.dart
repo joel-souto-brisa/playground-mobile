@@ -99,6 +99,24 @@ mixin _$FavoriteStore on _FavoriteStore, Store {
     });
   }
 
+  late final _$favoriteStatusAtom = Atom(
+    name: '_FavoriteStore.favoriteStatus',
+    context: context,
+  );
+
+  @override
+  Map<String, bool> get favoriteStatus {
+    _$favoriteStatusAtom.reportRead();
+    return super.favoriteStatus;
+  }
+
+  @override
+  set favoriteStatus(Map<String, bool> value) {
+    _$favoriteStatusAtom.reportWrite(value, super.favoriteStatus, () {
+      super.favoriteStatus = value;
+    });
+  }
+
   late final _$loadFavoritesAsyncAction = AsyncAction(
     '_FavoriteStore.loadFavorites',
     context: context,
@@ -109,13 +127,33 @@ mixin _$FavoriteStore on _FavoriteStore, Store {
     return _$loadFavoritesAsyncAction.run(() => super.loadFavorites());
   }
 
+  late final _$checkFavoriteAsyncAction = AsyncAction(
+    '_FavoriteStore.checkFavorite',
+    context: context,
+  );
+
+  @override
+  Future<bool?> checkFavorite(String itemId) {
+    return _$checkFavoriteAsyncAction.run(() => super.checkFavorite(itemId));
+  }
+
+  late final _$toggleFavoriteAsyncAction = AsyncAction(
+    '_FavoriteStore.toggleFavorite',
+    context: context,
+  );
+
+  @override
+  Future<bool?> toggleFavorite(String itemId) {
+    return _$toggleFavoriteAsyncAction.run(() => super.toggleFavorite(itemId));
+  }
+
   late final _$removeFavoriteAsyncAction = AsyncAction(
     '_FavoriteStore.removeFavorite',
     context: context,
   );
 
   @override
-  Future<void> removeFavorite(String itemId) {
+  Future<bool> removeFavorite(String itemId) {
     return _$removeFavoriteAsyncAction.run(() => super.removeFavorite(itemId));
   }
 
@@ -126,7 +164,8 @@ favoriteFilms: ${favoriteFilms},
 favoritePeople: ${favoritePeople},
 favoritePlanets: ${favoritePlanets},
 isLoading: ${isLoading},
-errorMessage: ${errorMessage}
+errorMessage: ${errorMessage},
+favoriteStatus: ${favoriteStatus}
     ''';
   }
 }

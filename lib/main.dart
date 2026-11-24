@@ -5,22 +5,22 @@ import 'package:flutter_application_1/app_routes.dart';
 import 'package:flutter_application_1/views/films_view.dart';
 import 'package:flutter_application_1/core/injection.dart';
 import 'package:flutter_application_1/stores/favorite_store.dart';
+import 'package:flutter_application_1/stores/auth_store.dart';
 import 'package:flutter_application_1/views/favorite_view.dart';
 import 'package:flutter_application_1/views/person_view.dart';
 import 'package:flutter_application_1/views/planet_view.dart';
 
 import 'views/login_view.dart';
 import 'views/register_view.dart';
-import 'service/auth_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   setupDependencies();
 
-  final authService = getIt<AuthService>();
-  final bool isLoggedIn = await authService.isUserLoggedIn();
+  final authStore = getIt<AuthStore>();
+  await authStore.restoreSession();
 
-  runApp(MyApp(isLoggedIn: isLoggedIn));
+  runApp(MyApp(isLoggedIn: authStore.isLoggedIn));
 }
 
 class MyApp extends StatelessWidget {
@@ -126,12 +126,22 @@ class _MainNavigationState extends State<MainNavigation> {
   }
 
   Future<void> _handleLogout() async {
-    final authService = getIt<AuthService>();
-    await authService.logout();
+    final authStore = getIt<AuthStore>();
+    final loggedOut = await authStore.logout();
 
     if (!mounted) return;
 
-    Navigator.pushNamedAndRemoveUntil(context, AppRoutes.login, (route) => false);
+    if (loggedOut) {
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        AppRoutes.login,
+        (route) => false,
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(authStore.errorMessage ?? 'Não foi possível sair.')),
+      );
+    }
   }
 
   @override

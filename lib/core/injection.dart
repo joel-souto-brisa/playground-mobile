@@ -9,6 +9,7 @@ import 'package:flutter_application_1/service/films_service.dart';
 import 'package:flutter_application_1/service/person_service.dart';
 import 'package:flutter_application_1/service/planet_service.dart';
 import 'package:flutter_application_1/stores/favorite_store.dart';
+import 'package:flutter_application_1/stores/auth_store.dart';
 import 'package:flutter_application_1/stores/films_store.dart';
 import 'package:flutter_application_1/stores/person_store.dart';
 import 'package:flutter_application_1/stores/planet_store.dart';
@@ -32,15 +33,22 @@ void setupDependencies() {
   getIt.registerFactory<PlanetStore>(() => PlanetStore(getIt<PlanetRepository>()));
 
   getIt.registerLazySingleton<AuthService>(() => AuthService());
+  getIt.registerLazySingleton<AuthStore>(
+    () => AuthStore(getIt<AuthService>()),
+  );
 
-  getIt.registerLazySingleton<FavoriteService>(() => FavoriteService());
-  getIt.registerLazySingleton<FavoriteRepository>(() => FavoriteRepository(getIt<FavoriteService>()));
-  getIt.registerFactory<FavoriteStore>(
-    () => FavoriteStore(
-      getIt<FavoriteRepository>(),
+  getIt.registerLazySingleton<FavoriteService>(
+    () => FavoriteService(getIt<AuthService>()),
+  );
+  getIt.registerLazySingleton<FavoriteRepository>(
+    () => FavoriteRepository(
+      getIt<FavoriteService>(),
       getIt<PersonRepository>(),
       getIt<PlanetRepository>(),
       getIt<FilmsRepository>(),
     ),
+  );
+  getIt.registerLazySingleton<FavoriteStore>(
+    () => FavoriteStore(getIt<FavoriteRepository>()),
   );
 }
