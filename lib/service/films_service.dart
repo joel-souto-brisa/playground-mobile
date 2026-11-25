@@ -1,4 +1,4 @@
-import '../models/films_model.dart';
+// import '../models/films_model.dart'; // model import removed
 import 'api_client.dart';
 
 class FilmsService {
@@ -6,7 +6,7 @@ class FilmsService {
 
   final ApiClient _apiClient;
 
-  Future<List<Film>> getFilms() async {
+  Future<List<dynamic>> getFilms() async {
     final response = await _apiClient.dio.get<Map<String, dynamic>>(
       "films/",
     );
@@ -18,12 +18,6 @@ class FilmsService {
 
     final results = data["results"] as List<dynamic>;
 
-    return results.map((item) {
-      if (item is! Map<String, dynamic>){
-        throw const FormatException("Filme recebido em formato inválido.");
-      }
-
-      return Film.fromJson(item);
-    }).toList();
+    return results;
   }
 }

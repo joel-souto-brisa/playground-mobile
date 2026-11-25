@@ -23,12 +23,12 @@ abstract class _PlanetStore with Store {
   String? errorMessage;
 
   @action 
-  Future<void> loadPlanets() async {
+  Future<void> loadPlanets({bool refresh = false}) async {
     isLoading = true;
     errorMessage = null;
-  
+
     try {
-      planets = await _planetRepository.getPlanets();
+      planets = await _planetRepository.getPlanets(refresh: refresh);
     } on DioException catch (error) {
       errorMessage = error.message ?? "Erro ao consultar a API";
     } on FormatException catch (error) {
@@ -36,5 +36,5 @@ abstract class _PlanetStore with Store {
     } finally {
       isLoading = false;
     }
-    }
+  }
 }

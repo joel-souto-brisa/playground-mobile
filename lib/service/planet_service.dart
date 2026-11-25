@@ -1,4 +1,4 @@
-import '../models/planet_model.dart';
+// import '../models/planet_model.dart'; // model import removed
 import 'api_client.dart';
 
 class PlanetService {
@@ -7,7 +7,7 @@ class PlanetService {
   final ApiClient _apiClient;
 
 
-  Future<List<Planet>> getPlanets() async {
+  Future<List<dynamic>> getPlanets() async {
     final response = await _apiClient.dio.get<Map<String, dynamic>>(
       "planets/",
       );
@@ -19,12 +19,6 @@ class PlanetService {
 
       final results = data['results'] as List<dynamic>;
 
-      return results.map((item) {
-        if (item is! Map<String, dynamic>) {
-          throw const FormatException("Planeta recebido em formato inválido.");
-        }
-
-        return Planet.fromJson(item);
-      }).toList();
+      return results;
   }
 }

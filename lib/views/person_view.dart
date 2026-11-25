@@ -40,7 +40,7 @@ class _PersonViewState extends State<PersonView> {
                   Text(_store.errorMessage!),
                   const SizedBox(height: 8),
                   ElevatedButton(
-                    onPressed: _store.loadPerson,
+                    onPressed: () => _store.loadPerson(refresh: true),
                     child: const Text('Tentar novamente'),
                   ),
                 ],

@@ -66,8 +66,8 @@ mixin _$FilmsStore on _FilmsStore, Store {
   );
 
   @override
-  Future<void> loadFilms() {
-    return _$loadFilmsAsyncAction.run(() => super.loadFilms());
+  Future<void> loadFilms({bool refresh = false}) {
+    return _$loadFilmsAsyncAction.run(() => super.loadFilms(refresh: refresh));
   }
 
   @override

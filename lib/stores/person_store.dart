@@ -23,12 +23,12 @@ abstract class _PersonStore with Store {
   String? errorMessage;
 
   @action
-  Future<void> loadPerson() async{
+  Future<void> loadPerson({bool refresh = false}) async{
     isLoading = true;
     errorMessage = null;
 
     try{
-      person = await _personRepository.getPerson();
+      person = await _personRepository.getPerson(refresh: refresh);
     } on DioException catch (error){
       errorMessage = error.message ?? "Erro ao consultar API.";
     } on FormatException catch (error) {

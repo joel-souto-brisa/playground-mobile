@@ -1,4 +1,4 @@
-import 'package:flutter_application_1/models/person_model.dart';
+// import 'package:flutter_application_1/models/person_model.dart'; // model import removed
 import 'package:flutter_application_1/service/api_client.dart';
 
 class PersonService {
@@ -7,7 +7,7 @@ class PersonService {
   final ApiClient _apiClient;
 
   
-  Future<List<Person>> getPerson() async {
+  Future<List<dynamic>> getPerson() async {
     final response = await _apiClient.dio.get<Map<String, dynamic>>(
       "people/"
     );
@@ -17,14 +17,8 @@ class PersonService {
       throw const FormatException("Resposta inválida ao buscar pessoas");
     }
 
-    final result = data["results"] as List<dynamic>;
+    final results = data["results"] as List<dynamic>;
 
-    return result.map((item) {
-      if (item is! Map<String, dynamic>){
-        throw const FormatException("Pessoa recebida em formato inválido.");
-      }
-
-      return Person.fromJson(item);
-    }).toList();
+    return results;
   }
 }

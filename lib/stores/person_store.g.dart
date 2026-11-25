@@ -66,8 +66,10 @@ mixin _$PersonStore on _PersonStore, Store {
   );
 
   @override
-  Future<void> loadPerson() {
-    return _$loadPersonAsyncAction.run(() => super.loadPerson());
+  Future<void> loadPerson({bool refresh = false}) {
+    return _$loadPersonAsyncAction.run(
+      () => super.loadPerson(refresh: refresh),
+    );
   }
 
   @override

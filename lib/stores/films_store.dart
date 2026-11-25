@@ -22,12 +22,12 @@ abstract class _FilmsStore with Store {
     String? errorMessage;
 
     @action
-    Future<void> loadFilms() async{
+    Future<void> loadFilms({bool refresh = false}) async{
       isLoading = true;
       errorMessage = null;
 
       try {
-        films = await _filmsRepository.getFilms();
+        films = await _filmsRepository.getFilms(refresh: refresh);
       } on DioException catch (error) {
         errorMessage = error.message ?? "Erro ao consultar a API.";
       } on FormatException catch (error) {
@@ -35,5 +35,5 @@ abstract class _FilmsStore with Store {
       } finally {
         isLoading = false;
       }
-    }
+  }
 }

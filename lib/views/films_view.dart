@@ -40,7 +40,7 @@ class _FilmsViewState extends State<FilmsView> {
                   Text(_store.errorMessage!),
                   const SizedBox(height: 8),
                   ElevatedButton(
-                    onPressed: _store.loadFilms,
+                    onPressed: () => _store.loadFilms(refresh: true),
                     child: const Text('Tentar novamente'),
                   ),
                 ],

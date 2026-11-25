@@ -69,8 +69,10 @@ mixin _$PlanetStore on _PlanetStore, Store {
   );
 
   @override
-  Future<void> loadPlanets() {
-    return _$loadPlanetsAsyncAction.run(() => super.loadPlanets());
+  Future<void> loadPlanets({bool refresh = false}) {
+    return _$loadPlanetsAsyncAction.run(
+      () => super.loadPlanets(refresh: refresh),
+    );
   }
 
   @override

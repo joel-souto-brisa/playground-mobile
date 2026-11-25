@@ -40,7 +40,7 @@ class _PlanetViewState extends State<PlanetView> {
                   Text(_store.errorMessage!),
                   const SizedBox(height: 8),
                   ElevatedButton(
-                    onPressed: _store.loadPlanets,
+                    onPressed: () => _store.loadPlanets(refresh: true),
                     child: const Text('Tentar novamente'),
                   ),
                 ],
