@@ -71,8 +71,7 @@ class FavoriteView extends StatelessWidget {
           );
         }
 
-        return ListView(
-          padding: const EdgeInsets.all(12),
+        return Column(
           children: [
             const GalacticHeader(
               title: 'Favoritos',
@@ -80,90 +79,97 @@ class FavoriteView extends StatelessWidget {
               icon: Icons.favorite,
               eyebrow: 'COLEÇÃO PESSOAL',
             ),
-            if (store.favoritePeople.isNotEmpty) ...[
-              _sectionTitle(context, 'Personagens'),
-              ...store.favoritePeople.map(
-                (person) => Card(
-                  child: ListTile(
-                    leading: const CircleAvatar(
-                      backgroundColor: Color(0xFF303A49),
-                      foregroundColor: Color(0xFFFFD54F),
-                      child: Icon(Icons.person),
-                    ),
-                    title: Text(person.name),
-                    subtitle: Text(
-                      'Gênero: ${person.gender}',
-                      style: const TextStyle(color: Color(0xFFD0D8E2)),
-                    ),
-                    trailing: IconButton(
-                      tooltip: 'Remover dos favoritos',
-                      icon: const Icon(
-                        Icons.favorite,
-                        color: Color(0xFFFFD54F),
+            Expanded(
+              child: ListView(
+                padding: const EdgeInsets.fromLTRB(12, 4, 12, 12),
+                children: [
+                  if (store.favoritePeople.isNotEmpty) ...[
+                    _sectionTitle(context, 'Personagens'),
+                    ...store.favoritePeople.map(
+                      (person) => Card(
+                        child: ListTile(
+                          leading: const CircleAvatar(
+                            backgroundColor: Color(0xFF303A49),
+                            foregroundColor: Color(0xFFFFD54F),
+                            child: Icon(Icons.person),
+                          ),
+                          title: Text(person.name),
+                          subtitle: Text(
+                            'Gênero: ${person.gender}',
+                            style: const TextStyle(color: Color(0xFFD0D8E2)),
+                          ),
+                          trailing: IconButton(
+                            tooltip: 'Remover dos favoritos',
+                            icon: const Icon(
+                              Icons.favorite,
+                              color: Color(0xFFFFD54F),
+                            ),
+                            onPressed: () =>
+                                store.removeFavorite('person:${person.name}'),
+                          ),
+                        ),
                       ),
-                      onPressed: () =>
-                          store.removeFavorite('person:${person.name}'),
                     ),
-                  ),
-                ),
-              ),
-            ],
-            if (store.favoritePlanets.isNotEmpty) ...[
-              _sectionTitle(context, 'Planetas'),
-              ...store.favoritePlanets.map(
-                (planet) => Card(
-                  child: ListTile(
-                    leading: const CircleAvatar(
-                      backgroundColor: Color(0xFF303A49),
-                      foregroundColor: Color(0xFFFFD54F),
-                      child: Icon(Icons.public),
-                    ),
-                    title: Text(planet.name),
-                    subtitle: Text(
-                      'Clima: ${planet.climate}',
-                      style: const TextStyle(color: Color(0xFFD0D8E2)),
-                    ),
-                    trailing: IconButton(
-                      tooltip: 'Remover dos favoritos',
-                      icon: const Icon(
-                        Icons.favorite,
-                        color: Color(0xFFFFD54F),
+                  ],
+                  if (store.favoritePlanets.isNotEmpty) ...[
+                    _sectionTitle(context, 'Planetas'),
+                    ...store.favoritePlanets.map(
+                      (planet) => Card(
+                        child: ListTile(
+                          leading: const CircleAvatar(
+                            backgroundColor: Color(0xFF303A49),
+                            foregroundColor: Color(0xFFFFD54F),
+                            child: Icon(Icons.public),
+                          ),
+                          title: Text(planet.name),
+                          subtitle: Text(
+                            'Clima: ${planet.climate}',
+                            style: const TextStyle(color: Color(0xFFD0D8E2)),
+                          ),
+                          trailing: IconButton(
+                            tooltip: 'Remover dos favoritos',
+                            icon: const Icon(
+                              Icons.favorite,
+                              color: Color(0xFFFFD54F),
+                            ),
+                            onPressed: () =>
+                                store.removeFavorite('planet:${planet.name}'),
+                          ),
+                        ),
                       ),
-                      onPressed: () =>
-                          store.removeFavorite('planet:${planet.name}'),
                     ),
-                  ),
-                ),
-              ),
-            ],
-            if (store.favoriteFilms.isNotEmpty) ...[
-              _sectionTitle(context, 'Filmes'),
-              ...store.favoriteFilms.map(
-                (film) => Card(
-                  child: ListTile(
-                    leading: CircleAvatar(
-                      backgroundColor: const Color(0xFF303A49),
-                      foregroundColor: const Color(0xFFFFD54F),
-                      child: Text('E${film.episodeId}'),
-                    ),
-                    title: Text(film.title),
-                    subtitle: Text(
-                      'Diretor: ${film.director}',
-                      style: const TextStyle(color: Color(0xFFD0D8E2)),
-                    ),
-                    trailing: IconButton(
-                      tooltip: 'Remover dos favoritos',
-                      icon: const Icon(
-                        Icons.favorite,
-                        color: Color(0xFFFFD54F),
+                  ],
+                  if (store.favoriteFilms.isNotEmpty) ...[
+                    _sectionTitle(context, 'Filmes'),
+                    ...store.favoriteFilms.map(
+                      (film) => Card(
+                        child: ListTile(
+                          leading: CircleAvatar(
+                            backgroundColor: const Color(0xFF303A49),
+                            foregroundColor: const Color(0xFFFFD54F),
+                            child: Text('E${film.episodeId}'),
+                          ),
+                          title: Text(film.title),
+                          subtitle: Text(
+                            'Diretor: ${film.director}',
+                            style: const TextStyle(color: Color(0xFFD0D8E2)),
+                          ),
+                          trailing: IconButton(
+                            tooltip: 'Remover dos favoritos',
+                            icon: const Icon(
+                              Icons.favorite,
+                              color: Color(0xFFFFD54F),
+                            ),
+                            onPressed: () =>
+                                store.removeFavorite('film:${film.episodeId}'),
+                          ),
+                        ),
                       ),
-                      onPressed: () =>
-                          store.removeFavorite('film:${film.episodeId}'),
                     ),
-                  ),
-                ),
+                  ],
+                ],
               ),
-            ],
+            ),
           ],
         );
       },

@@ -25,9 +25,11 @@ abstract class _AuthStore with Store {
     errorMessage = null;
     try {
       isLoggedIn = await _authService.isUserLoggedIn();
-    } on Exception catch (error) {
-      errorMessage = _messageFrom(error);
-      rethrow;
+    } catch (error) {
+      isLoggedIn = false;
+      errorMessage = error is Exception
+          ? _messageFrom(error)
+          : 'Não foi possível restaurar a sessão.';
     } finally {
       isLoading = false;
     }
