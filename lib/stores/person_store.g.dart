@@ -9,6 +9,15 @@ part of 'person_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$PersonStore on _PersonStore, Store {
+  Computed<List<Person>>? _$filteredPersonComputed;
+
+  @override
+  List<Person> get filteredPerson =>
+      (_$filteredPersonComputed ??= Computed<List<Person>>(
+        () => super.filteredPerson,
+        name: '_PersonStore.filteredPerson',
+      )).value;
+
   late final _$personAtom = Atom(name: '_PersonStore.person', context: context);
 
   @override
@@ -21,6 +30,24 @@ mixin _$PersonStore on _PersonStore, Store {
   set person(List<Person> value) {
     _$personAtom.reportWrite(value, super.person, () {
       super.person = value;
+    });
+  }
+
+  late final _$searchQueryAtom = Atom(
+    name: '_PersonStore.searchQuery',
+    context: context,
+  );
+
+  @override
+  String get searchQuery {
+    _$searchQueryAtom.reportRead();
+    return super.searchQuery;
+  }
+
+  @override
+  set searchQuery(String value) {
+    _$searchQueryAtom.reportWrite(value, super.searchQuery, () {
+      super.searchQuery = value;
     });
   }
 
@@ -72,12 +99,31 @@ mixin _$PersonStore on _PersonStore, Store {
     );
   }
 
+  late final _$_PersonStoreActionController = ActionController(
+    name: '_PersonStore',
+    context: context,
+  );
+
+  @override
+  void setSearchQuery(String value) {
+    final _$actionInfo = _$_PersonStoreActionController.startAction(
+      name: '_PersonStore.setSearchQuery',
+    );
+    try {
+      return super.setSearchQuery(value);
+    } finally {
+      _$_PersonStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
   @override
   String toString() {
     return '''
 person: ${person},
+searchQuery: ${searchQuery},
 isLoading: ${isLoading},
-errorMessage: ${errorMessage}
+errorMessage: ${errorMessage},
+filteredPerson: ${filteredPerson}
     ''';
   }
 }

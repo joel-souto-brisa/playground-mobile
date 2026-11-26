@@ -17,12 +17,32 @@ abstract class _PlanetStore with Store {
   List<Planet> planets = [];
 
   @observable
+  String searchQuery = '';
+
+  @observable
   bool isLoading = false;
 
   @observable
   String? errorMessage;
 
-  @action 
+  @computed
+  List<Planet> get filteredPlanets {
+    final query = searchQuery.trim().toLowerCase();
+    if (query.isEmpty) return planets;
+
+    return planets.where((item) {
+      return item.name.toLowerCase().contains(query) ||
+          item.climate.toLowerCase().contains(query) ||
+          item.terrain.toLowerCase().contains(query);
+    }).toList();
+  }
+
+  @action
+  void setSearchQuery(String value) {
+    searchQuery = value;
+  }
+
+  @action
   Future<void> loadPlanets({bool refresh = false}) async {
     isLoading = true;
     errorMessage = null;
@@ -30,7 +50,7 @@ abstract class _PlanetStore with Store {
     try {
       planets = await _planetRepository.getPlanets(refresh: refresh);
     } on DioException catch (error) {
-      errorMessage = error.message ?? "Erro ao consultar a API";
+      errorMessage = error.message ?? 'Erro ao consultar a API';
     } on FormatException catch (error) {
       errorMessage = error.message;
     } finally {

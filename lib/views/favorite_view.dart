@@ -35,18 +35,21 @@ class FavoriteView extends StatelessWidget {
           );
         }
 
-        if (store.favoritePeople.isEmpty &&
-            store.favoritePlanets.isEmpty &&
-            store.favoriteFilms.isEmpty) {
-          return Column(
+        final totalFavorites = store.favoritePeople.length +
+            store.favoritePlanets.length +
+            store.favoriteFilms.length;
+
+        if (totalFavorites == 0) {
+          return const Column(
             children: [
-              const GalacticHeader(
+              GalacticHeader(
                 title: 'Favoritos',
                 subtitle: 'Sua coleção pessoal de toda a galáxia.',
                 icon: Icons.favorite,
                 eyebrow: 'COLEÇÃO PESSOAL',
+                totalCount: 0,
               ),
-              const Expanded(
+              Expanded(
                 child: Center(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
@@ -73,18 +76,22 @@ class FavoriteView extends StatelessWidget {
 
         return Column(
           children: [
-            const GalacticHeader(
+            GalacticHeader(
               title: 'Favoritos',
               subtitle: 'Sua coleção pessoal de toda a galáxia.',
               icon: Icons.favorite,
               eyebrow: 'COLEÇÃO PESSOAL',
+              totalCount: totalFavorites,
             ),
             Expanded(
               child: ListView(
                 padding: const EdgeInsets.fromLTRB(12, 4, 12, 12),
                 children: [
                   if (store.favoritePeople.isNotEmpty) ...[
-                    _sectionTitle(context, 'Personagens'),
+                    _sectionTitle(
+                      context,
+                      'Personagens (${store.favoritePeople.length})',
+                    ),
                     ...store.favoritePeople.map(
                       (person) => Card(
                         child: ListTile(
@@ -112,7 +119,10 @@ class FavoriteView extends StatelessWidget {
                     ),
                   ],
                   if (store.favoritePlanets.isNotEmpty) ...[
-                    _sectionTitle(context, 'Planetas'),
+                    _sectionTitle(
+                      context,
+                      'Planetas (${store.favoritePlanets.length})',
+                    ),
                     ...store.favoritePlanets.map(
                       (planet) => Card(
                         child: ListTile(
@@ -140,7 +150,10 @@ class FavoriteView extends StatelessWidget {
                     ),
                   ],
                   if (store.favoriteFilms.isNotEmpty) ...[
-                    _sectionTitle(context, 'Filmes'),
+                    _sectionTitle(
+                      context,
+                      'Filmes (${store.favoriteFilms.length})',
+                    ),
                     ...store.favoriteFilms.map(
                       (film) => Card(
                         child: ListTile(

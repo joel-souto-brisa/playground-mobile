@@ -9,31 +9,51 @@ part 'films_store.g.dart';
 class FilmsStore = _FilmsStore with _$FilmsStore;
 
 abstract class _FilmsStore with Store {
-    _FilmsStore(this._filmsRepository);
-    final FilmsRepository _filmsRepository;
+  _FilmsStore(this._filmsRepository);
+  final FilmsRepository _filmsRepository;
 
-    @observable
-    List<Film> films = [];
+  @observable
+  List<Film> films = [];
 
-    @observable
-    bool isLoading = false;
+  @observable
+  String searchQuery = '';
 
-    @observable
-    String? errorMessage;
+  @observable
+  bool isLoading = false;
 
-    @action
-    Future<void> loadFilms({bool refresh = false}) async{
-      isLoading = true;
-      errorMessage = null;
+  @observable
+  String? errorMessage;
 
-      try {
-        films = await _filmsRepository.getFilms(refresh: refresh);
-      } on DioException catch (error) {
-        errorMessage = error.message ?? "Erro ao consultar a API.";
-      } on FormatException catch (error) {
-        errorMessage = error.message;
-      } finally {
-        isLoading = false;
-      }
+  @computed
+  List<Film> get filteredFilms {
+    final query = searchQuery.trim().toLowerCase();
+    if (query.isEmpty) return films;
+
+    return films.where((item) {
+      return item.title.toLowerCase().contains(query) ||
+          item.director.toLowerCase().contains(query) ||
+          item.releaseDate.toLowerCase().contains(query);
+    }).toList();
+  }
+
+  @action
+  void setSearchQuery(String value) {
+    searchQuery = value;
+  }
+
+  @action
+  Future<void> loadFilms({bool refresh = false}) async {
+    isLoading = true;
+    errorMessage = null;
+
+    try {
+      films = await _filmsRepository.getFilms(refresh: refresh);
+    } on DioException catch (error) {
+      errorMessage = error.message ?? 'Erro ao consultar a API.';
+    } on FormatException catch (error) {
+      errorMessage = error.message;
+    } finally {
+      isLoading = false;
+    }
   }
 }

@@ -7,12 +7,14 @@ class GalacticHeader extends StatelessWidget {
     required this.subtitle,
     required this.icon,
     this.eyebrow = 'ARQUIVO GALÁCTICO',
+    this.totalCount,
   });
 
   final String title;
   final String subtitle;
   final IconData icon;
   final String eyebrow;
+  final int? totalCount;
 
   @override
   Widget build(BuildContext context) {
@@ -47,8 +49,8 @@ class GalacticHeader extends StatelessWidget {
               children: [
                 Text(
                   eyebrow,
-                  style: TextStyle(
-                    color: const Color(0xFFFFD54F),
+                  style: const TextStyle(
+                    color: Color(0xFFFFD54F),
                     fontSize: 10,
                     fontWeight: FontWeight.w700,
                     letterSpacing: 1.8,
@@ -73,12 +75,32 @@ class GalacticHeader extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(width: 8),
-          Icon(
-            Icons.auto_awesome,
-            color: const Color(0xFFFFD54F),
-            size: 18,
-          ),
+          if (totalCount != null) ...[
+            const SizedBox(width: 8),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+              decoration: BoxDecoration(
+                color: const Color(0x1AFFD54F),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: const Color(0x55FFD54F)),
+              ),
+              child: Text(
+                '$totalCount',
+                style: const TextStyle(
+                  color: Color(0xFFFFD54F),
+                  fontWeight: FontWeight.bold,
+                  fontSize: 13,
+                ),
+              ),
+            ),
+          ] else ...[
+            const SizedBox(width: 8),
+            const Icon(
+              Icons.auto_awesome,
+              color: Color(0xFFFFD54F),
+              size: 18,
+            ),
+          ],
         ],
       ),
     );
