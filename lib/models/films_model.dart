@@ -40,4 +40,20 @@ class Film {
       species: List<String>.from(json['species'] as List),
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'title': title,
+      'episode_id': episodeId,
+      'opening_crawl': openingCrawl,
+      'director': director,
+      'producer': producer,
+      'release_date': releaseDate,
+      'characters': characters,
+      'planets': planets,
+      'starships': starships,
+      'vehicles': vehicles,
+      'species': species,
+    };
+  }
 }

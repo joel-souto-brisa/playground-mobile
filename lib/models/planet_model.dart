@@ -10,7 +10,7 @@ class Planet {
     required this.surfaceWater,
     required this.population,
     required this.residents,
-    required this.films
+    required this.films,
   });
 
   final String name;
@@ -36,8 +36,24 @@ class Planet {
       terrain: json['terrain'] as String,
       surfaceWater: json['surface_water'] as String,
       population: json['population'] as String,
-      residents: List<String>.from(json["residents"] as List),
-      films: List<String>.from(json["films"] as List)
+      residents: List<String>.from(json['residents'] as List),
+      films: List<String>.from(json['films'] as List),
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'rotation_period': rotationPeriod,
+      'orbital_period': orbitalPeriod,
+      'diameter': diameter,
+      'climate': climate,
+      'gravity': gravity,
+      'terrain': terrain,
+      'surface_water': surfaceWater,
+      'population': population,
+      'residents': residents,
+      'films': films,
+    };
   }
 }

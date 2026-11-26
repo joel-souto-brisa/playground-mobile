@@ -12,7 +12,7 @@ class Person {
     required this.films,
     required this.species,
     required this.vehicles,
-    required this.starships
+    required this.starships,
   });
 
   final String name;
@@ -29,7 +29,6 @@ class Person {
   final List<String> vehicles;
   final List<String> starships;
 
-
   factory Person.fromJson(Map<String, dynamic> json) {
     return Person(
       name: json['name'] as String,
@@ -40,11 +39,29 @@ class Person {
       eyeColor: json['eye_color'] as String,
       birthYear: json['birth_year'] as String,
       gender: json['gender'] as String,
-      homeWorld: json["homeworld"] as String,
-      films: List<String>.from(json["films"] as List),
-      species: List<String>.from(json["species"] as List),
-      vehicles: List<String>.from(json["vehicles"] as List),
-      starships: List<String>.from(json["starships"] as List),
+      homeWorld: json['homeworld'] as String,
+      films: List<String>.from(json['films'] as List),
+      species: List<String>.from(json['species'] as List),
+      vehicles: List<String>.from(json['vehicles'] as List),
+      starships: List<String>.from(json['starships'] as List),
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'height': height,
+      'mass': mass,
+      'hair_color': hairColor,
+      'skin_color': skinColor,
+      'eye_color': eyeColor,
+      'birth_year': birthYear,
+      'gender': gender,
+      'homeworld': homeWorld,
+      'films': films,
+      'species': species,
+      'vehicles': vehicles,
+      'starships': starships,
+    };
   }
 }
