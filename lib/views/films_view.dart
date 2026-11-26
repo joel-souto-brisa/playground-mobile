@@ -24,79 +24,79 @@ class _FilmsViewState extends State<FilmsView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Filmes de Star Wars')),
-      body: Observer(
-        builder: (_) {
-          if (_store.isLoading) {
-            return const Center(child: CircularProgressIndicator());
-          }
+    return Observer(
+      builder: (_) {
+        if (_store.isLoading) {
+          return const Center(child: CircularProgressIndicator());
+        }
 
-          if (_store.errorMessage != null) {
-            return Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(_store.errorMessage!),
-                  const SizedBox(height: 8),
-                  ElevatedButton(
-                    onPressed: () => _store.loadFilms(refresh: true),
-                    child: const Text('Tentar novamente'),
-                  ),
-                ],
-              ),
-            );
-          }
-
-          if (_store.films.isEmpty) {
-            return const Center(child: Text('Nenhum filme encontrado'));
-          }
-
-          return ListView.separated(
-            padding: const EdgeInsets.all(12),
-            itemCount: _store.films.length + 1,
-            separatorBuilder: (context, index) => const SizedBox(height: 8),
-            itemBuilder: (context, index) {
-              if (index == 0) {
-                return const GalacticHeader(
-                  title: 'Filmes',
-                  subtitle: 'Reviva as sagas que marcaram a galáxia.',
-                  icon: Icons.movie_outlined,
-                  eyebrow: 'HOLOCRON CINEMATOGRÁFICO',
-                );
-              }
-
-              final film = _store.films[index - 1];
-
-              return Card(
-                child: ListTile(
-                  leading: CircleAvatar(
-                    backgroundColor: const Color(0x1AFFD54F),
-                    foregroundColor: const Color(0xFFFFD54F),
-                    child: Text(
-                      'E${film.episodeId}',
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  title: Text(
-                    film.title,
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                  subtitle: Text(
-                    'Diretor: ${film.director}\nLançamento: ${film.releaseDate}',
-                    style: const TextStyle(color: Color(0xFFD0D8E2)),
-                  ),
-                  isThreeLine: true,
-                  trailing: FavoriteButton(
-                    key: ValueKey('film:${film.episodeId}'),
-                    itemId: 'film:${film.episodeId}',
-                  ),
+        if (_store.errorMessage != null) {
+          return Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(_store.errorMessage!),
+                const SizedBox(height: 8),
+                ElevatedButton(
+                  onPressed: () => _store.loadFilms(refresh: true),
+                  child: const Text('Tentar novamente'),
                 ),
-              );
-            },
+              ],
+            ),
           );
-        },
-      ),
+        }
+
+        if (_store.films.isEmpty) {
+          return const Center(child: Text('Nenhum filme encontrado'));
+        }
+
+        return Column(
+          children: [
+            const GalacticHeader(
+              title: 'Filmes',
+              subtitle: 'Reviva as sagas que marcaram a galáxia.',
+              icon: Icons.movie_outlined,
+              eyebrow: 'HOLOCRON CINEMATOGRÁFICO',
+            ),
+            Expanded(
+              child: ListView.separated(
+                padding: const EdgeInsets.all(12),
+                itemCount: _store.films.length,
+                separatorBuilder: (context, index) => const SizedBox(height: 8),
+                itemBuilder: (context, index) {
+                  final film = _store.films[index];
+
+                  return Card(
+                    child: ListTile(
+                      leading: CircleAvatar(
+                        backgroundColor: const Color(0x1AFFD54F),
+                        foregroundColor: const Color(0xFFFFD54F),
+                        child: Text(
+                          'E${film.episodeId}',
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      title: Text(
+                        film.title,
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                      subtitle: Text(
+                        'Diretor: ${film.director}\nLançamento: ${film.releaseDate}',
+                        style: const TextStyle(color: Color(0xFFD0D8E2)),
+                      ),
+                      isThreeLine: true,
+                      trailing: FavoriteButton(
+                        key: ValueKey('film:${film.episodeId}'),
+                        itemId: 'film:${film.episodeId}',
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

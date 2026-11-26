@@ -95,112 +95,116 @@ class _LoginViewState extends State<LoginView> {
                 ),
               ),
             ),
-            Center(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 24,
-                  vertical: 36,
-                ),
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 440),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Icon(
-                        Icons.auto_awesome,
-                        color: Color(0xFFFFD54F),
-                        size: 36,
-                      ),
-                      const SizedBox(height: 12),
-                      const Text(
-                        'STAR WARS',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Color(0xFFFFD54F),
-                          fontSize: 34,
-                          fontWeight: FontWeight.w900,
-                          letterSpacing: 5,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        'ENCICLOPÉDIA GALÁCTICA',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.white.withValues(alpha: 0.65),
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                          letterSpacing: 2.4,
-                        ),
-                      ),
-                      const SizedBox(height: 32),
-                      Container(
-                        padding: const EdgeInsets.all(24),
-                        decoration: BoxDecoration(
-                          color: const Color(0xE6101724),
-                          borderRadius: BorderRadius.circular(24),
-                          border: Border.all(
-                            color: Colors.white.withValues(alpha: 0.1),
+            LayoutBuilder(
+              builder: (context, constraints) {
+                final isCompact = constraints.maxWidth < 390 || constraints.maxHeight < 700;
+
+                return Center(
+                  child: SingleChildScrollView(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: isCompact ? 16 : 24,
+                      vertical: isCompact ? 16 : 36,
+                    ),
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: 440),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.auto_awesome,
+                            color: const Color(0xFFFFD54F),
+                            size: isCompact ? 28 : 36,
                           ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.28),
-                              blurRadius: 28,
-                              offset: const Offset(0, 16),
+                          SizedBox(height: isCompact ? 8 : 12),
+                          Text(
+                            'STAR WARS',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: const Color(0xFFFFD54F),
+                              fontSize: isCompact ? 28 : 34,
+                              fontWeight: FontWeight.w900,
+                              letterSpacing: isCompact ? 3.5 : 5,
                             ),
-                          ],
-                        ),
-                        child: Form(
-                          key: _formKey,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              const Text(
-                                'Acesse a galáxia',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                          ),
+                          const SizedBox(height: 6),
+                          Text(
+                            'ENCICLOPÉDIA GALÁCTICA',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Colors.white.withValues(alpha: 0.65),
+                              fontSize: 11,
+                              fontWeight: FontWeight.w600,
+                              letterSpacing: 2.2,
+                            ),
+                          ),
+                          SizedBox(height: isCompact ? 20 : 32),
+                          Container(
+                            width: double.infinity,
+                            padding: EdgeInsets.all(isCompact ? 18 : 24),
+                            decoration: BoxDecoration(
+                              color: const Color(0xE6101724),
+                              borderRadius: BorderRadius.circular(24),
+                              border: Border.all(
+                                color: Colors.white.withValues(alpha: 0.1),
                               ),
-                              const SizedBox(height: 8),
-                              Text(
-                                'Entre para explorar personagens, planetas e filmes.',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: Colors.white.withValues(alpha: 0.65),
-                                  height: 1.4,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withValues(alpha: 0.28),
+                                  blurRadius: 28,
+                                  offset: const Offset(0, 16),
                                 ),
-                              ),
-                              const SizedBox(height: 28),
-                              TextFormField(
-                                controller: _emailController,
-                                keyboardType: TextInputType.emailAddress,
-                                textInputAction: TextInputAction.next,
-                                style: const TextStyle(color: Colors.white),
-                                decoration: _inputDecoration(
-                                  label: 'E-mail',
-                                  icon: Icons.alternate_email,
-                                ),
-                                validator: (value) {
-                                  if (value == null || value.trim().isEmpty) {
-                                    return 'Informe seu e-mail';
-                                  }
-                                  return null;
-                                },
-                              ),
-                              const SizedBox(height: 16),
-                              TextFormField(
-                                controller: _passwordController,
-                                obscureText: _obscurePassword,
-                                textInputAction: TextInputAction.done,
-                                onFieldSubmitted: (_) {
-                                  if (!_authStore.isLoading) _handleLogin();
-                                },
-                                style: const TextStyle(color: Colors.white),
-                                decoration:
-                                    _inputDecoration(
+                              ],
+                            ),
+                            child: Form(
+                              key: _formKey,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  Text(
+                                    'Acesse a galáxia',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: isCompact ? 20 : 24,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Text(
+                                    'Entre para explorar personagens, planetas e filmes.',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: Colors.white.withValues(alpha: 0.65),
+                                      height: 1.4,
+                                    ),
+                                  ),
+                                  SizedBox(height: isCompact ? 20 : 28),
+                                  TextFormField(
+                                    controller: _emailController,
+                                    keyboardType: TextInputType.emailAddress,
+                                    textInputAction: TextInputAction.next,
+                                    style: const TextStyle(color: Colors.white),
+                                    decoration: _inputDecoration(
+                                      label: 'E-mail',
+                                      icon: Icons.alternate_email,
+                                    ),
+                                    validator: (value) {
+                                      if (value == null || value.trim().isEmpty) {
+                                        return 'Informe seu e-mail';
+                                      }
+                                      return null;
+                                    },
+                                  ),
+                                  const SizedBox(height: 16),
+                                  TextFormField(
+                                    controller: _passwordController,
+                                    obscureText: _obscurePassword,
+                                    textInputAction: TextInputAction.done,
+                                    onFieldSubmitted: (_) {
+                                      if (!_authStore.isLoading) _handleLogin();
+                                    },
+                                    style: const TextStyle(color: Colors.white),
+                                    decoration: _inputDecoration(
                                       label: 'Senha',
                                       icon: Icons.lock_outline,
                                     ).copyWith(
@@ -216,97 +220,98 @@ class _LoginViewState extends State<LoginView> {
                                         ),
                                         onPressed: () {
                                           setState(() {
-                                            _obscurePassword =
-                                                !_obscurePassword;
+                                            _obscurePassword = !_obscurePassword;
                                           });
                                         },
                                       ),
                                     ),
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'Informe sua senha';
-                                  }
-                                  return null;
-                                },
-                              ),
-                              const SizedBox(height: 24),
-                              Observer(
-                                builder: (_) => FilledButton.icon(
-                                  onPressed: _authStore.isLoading
-                                      ? null
-                                      : _handleLogin,
-                                  icon: _authStore.isLoading
-                                      ? const SizedBox(
-                                          width: 18,
-                                          height: 18,
-                                          child: CircularProgressIndicator(
-                                            strokeWidth: 2,
-                                            color: Color(0xFF11151D),
-                                          ),
-                                        )
-                                      : const Icon(
-                                          Icons.rocket_launch_outlined,
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return 'Informe sua senha';
+                                      }
+                                      return null;
+                                    },
+                                  ),
+                                  SizedBox(height: isCompact ? 18 : 24),
+                                  Observer(
+                                    builder: (_) => FilledButton.icon(
+                                      onPressed: _authStore.isLoading
+                                          ? null
+                                          : _handleLogin,
+                                      icon: _authStore.isLoading
+                                          ? const SizedBox(
+                                              width: 18,
+                                              height: 18,
+                                              child: CircularProgressIndicator(
+                                                strokeWidth: 2,
+                                                color: Color(0xFF11151D),
+                                              ),
+                                            )
+                                          : const Icon(
+                                              Icons.rocket_launch_outlined,
+                                            ),
+                                      label: Text(
+                                        _authStore.isLoading
+                                            ? 'Conectando...'
+                                            : 'Entrar',
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
                                         ),
-                                  label: Text(
-                                    _authStore.isLoading
-                                        ? 'Conectando...'
-                                        : 'Entrar',
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
+                                      ),
+                                      style: FilledButton.styleFrom(
+                                        foregroundColor: const Color(0xFF11151D),
+                                        backgroundColor: const Color(0xFFFFD54F),
+                                        disabledBackgroundColor: const Color(
+                                          0xFFFFD54F,
+                                        ),
+                                        disabledForegroundColor: const Color(
+                                          0xFF11151D,
+                                        ),
+                                        minimumSize: const Size.fromHeight(50),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(14),
+                                        ),
+                                      ),
                                     ),
                                   ),
-                                  style: FilledButton.styleFrom(
-                                    foregroundColor: const Color(0xFF11151D),
-                                    backgroundColor: const Color(0xFFFFD54F),
-                                    disabledBackgroundColor: const Color(
-                                      0xFFFFD54F,
-                                    ),
-                                    disabledForegroundColor: const Color(
-                                      0xFF11151D,
-                                    ),
-                                    minimumSize: const Size.fromHeight(54),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(14),
+                                  const SizedBox(height: 12),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pushNamed(
+                                        context,
+                                        AppRoutes.register,
+                                      );
+                                    },
+                                    child: const Text(
+                                      'Novo por aqui? Crie sua conta',
+                                      style: TextStyle(
+                                        color: Color(0xFFFFD54F),
+                                        fontWeight: FontWeight.w600,
+                                      ),
                                     ),
                                   ),
-                                ),
+                                ],
                               ),
-                              const SizedBox(height: 16),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.pushNamed(
-                                    context,
-                                    AppRoutes.register,
-                                  );
-                                },
-                                child: const Text(
-                                  'Novo por aqui? Crie sua conta',
-                                  style: TextStyle(
-                                    color: Color(0xFFFFD54F),
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ),
-                            ],
+                            ),
                           ),
-                        ),
+                          SizedBox(height: isCompact ? 16 : 24),
+                          Text(
+                            'QUE A FORÇA ESTEJA COM VOCÊ',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Colors.white.withValues(alpha: 0.45),
+                              fontSize: 10,
+                              fontWeight: FontWeight.w600,
+                              letterSpacing: 2,
+                            ),
+                          ),
+                        ],
                       ),
-                      const SizedBox(height: 24),
-                      Text(
-                        'QUE A FORÇA ESTEJA COM VOCÊ',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.white.withValues(alpha: 0.45),
-                          fontSize: 10,
-                          fontWeight: FontWeight.w600,
-                          letterSpacing: 2,
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
-                ),
-              ),
+                );
+              },
             ),
           ],
         ),
