@@ -157,6 +157,23 @@ mixin _$FavoriteStore on _FavoriteStore, Store {
     return _$removeFavoriteAsyncAction.run(() => super.removeFavorite(itemId));
   }
 
+  late final _$_FavoriteStoreActionController = ActionController(
+    name: '_FavoriteStore',
+    context: context,
+  );
+
+  @override
+  void clear() {
+    final _$actionInfo = _$_FavoriteStoreActionController.startAction(
+      name: '_FavoriteStore.clear',
+    );
+    try {
+      return super.clear();
+    } finally {
+      _$_FavoriteStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
   @override
   String toString() {
     return '''

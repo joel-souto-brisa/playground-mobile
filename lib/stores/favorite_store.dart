@@ -105,4 +105,14 @@ abstract class _FavoriteStore with Store {
       return false;
     }
   }
+
+  @action
+  void clear(){
+    favoriteFilms = [];
+    favoritePeople = [];
+    favoritePlanets = [];
+    favoriteStatus = {};
+    errorMessage = null;
+    isLoading = false;
+  }
 }

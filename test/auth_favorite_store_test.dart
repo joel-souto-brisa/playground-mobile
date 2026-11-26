@@ -64,5 +64,8 @@ void main() {
 
     await authService.doLogin('first@example.com', 'password');
     expect(await store.checkFavorite('person:Leia'), isTrue);
+    store.clear();
+    expect(store.favoriteStatus, isEmpty);
+    expect(store.favoritePeople, isEmpty);  
   });
 }

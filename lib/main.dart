@@ -132,6 +132,7 @@ class _MainNavigationState extends State<MainNavigation> {
     if (!mounted) return;
 
     if (loggedOut) {
+      _favoriteStore.clear();
       Navigator.pushNamedAndRemoveUntil(
         context,
         AppRoutes.login,
