@@ -4,6 +4,7 @@ import 'package:flutter_application_1/stores/films_store.dart';
 import 'package:flutter_application_1/widgets/favorite_button.dart';
 import 'package:flutter_application_1/widgets/galactic_header.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_application_1/widgets/item_detail_sheet.dart';
 
 class FilmsView extends StatefulWidget {
   const FilmsView({super.key});
@@ -119,7 +120,9 @@ class _FilmsViewState extends State<FilmsView> {
                         final film = items[index];
 
                         return Card(
+                          clipBehavior: Clip.antiAlias,
                           child: ListTile(
+                            onTap: () => showFilmDetails(context, film),
                             leading: CircleAvatar(
                               backgroundColor: const Color(0x1AFFD54F),
                               foregroundColor: const Color(0xFFFFD54F),

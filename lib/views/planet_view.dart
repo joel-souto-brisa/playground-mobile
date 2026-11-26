@@ -4,6 +4,7 @@ import 'package:flutter_application_1/stores/planet_store.dart';
 import 'package:flutter_application_1/widgets/favorite_button.dart';
 import 'package:flutter_application_1/widgets/galactic_header.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_application_1/widgets/item_detail_sheet.dart';
 
 class PlanetView extends StatefulWidget {
   const PlanetView({super.key});
@@ -124,7 +125,10 @@ class _PlanetViewState extends State<PlanetView> {
                         final planet = items[index];
 
                         return Card(
-                          child: Padding(
+                          clipBehavior: Clip.antiAlias,
+                          child: InkWell(
+                            onTap: () => showPlanetDetails(context, planet),
+                            child: Padding(
                             padding: const EdgeInsets.all(12),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -180,6 +184,7 @@ class _PlanetViewState extends State<PlanetView> {
                               ],
                             ),
                           ),
+                        )
                         );
                       },
                     ),

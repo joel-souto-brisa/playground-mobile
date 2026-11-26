@@ -76,6 +76,17 @@ abstract class _FavoriteStore with Store {
     try {
       final isFavorite = await _favoriteRepository.toggleFavorite(itemId);
       favoriteStatus = {...favoriteStatus, itemId: isFavorite};
+      if (!isFavorite) {
+        favoritePeople = favoritePeople
+            .where((person) => itemId != 'person:${person.name}')
+            .toList();
+        favoritePlanets = favoritePlanets
+            .where((planet) => itemId != 'planet:${planet.name}')
+            .toList();
+        favoriteFilms = favoriteFilms
+            .where((film) => itemId != 'film:${film.episodeId}')
+            .toList();
+      }
       return isFavorite;
     } on Exception catch (error) {
       errorMessage = error.toString().replaceFirst('Exception: ', '');

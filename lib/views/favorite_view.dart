@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/stores/favorite_store.dart';
 import 'package:flutter_application_1/widgets/galactic_header.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_application_1/widgets/item_detail_sheet.dart';
 
 class FavoriteView extends StatelessWidget {
   const FavoriteView({super.key, required this.store});
@@ -95,6 +96,7 @@ class FavoriteView extends StatelessWidget {
                     ...store.favoritePeople.map(
                       (person) => Card(
                         child: ListTile(
+                          onTap: () => showPersonDetails(context, person),
                           leading: const CircleAvatar(
                             backgroundColor: Color(0xFF303A49),
                             foregroundColor: Color(0xFFFFD54F),
@@ -126,6 +128,7 @@ class FavoriteView extends StatelessWidget {
                     ...store.favoritePlanets.map(
                       (planet) => Card(
                         child: ListTile(
+                          onTap: () => showPlanetDetails(context, planet),
                           leading: const CircleAvatar(
                             backgroundColor: Color(0xFF303A49),
                             foregroundColor: Color(0xFFFFD54F),
@@ -157,6 +160,7 @@ class FavoriteView extends StatelessWidget {
                     ...store.favoriteFilms.map(
                       (film) => Card(
                         child: ListTile(
+                          onTap: () => showFilmDetails(context, film),
                           leading: CircleAvatar(
                             backgroundColor: const Color(0xFF303A49),
                             foregroundColor: const Color(0xFFFFD54F),

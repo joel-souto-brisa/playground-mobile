@@ -4,6 +4,7 @@ import 'package:flutter_application_1/stores/person_store.dart';
 import 'package:flutter_application_1/widgets/favorite_button.dart';
 import 'package:flutter_application_1/widgets/galactic_header.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_application_1/widgets/item_detail_sheet.dart';
 
 class PersonView extends StatefulWidget {
   const PersonView({super.key});
@@ -124,7 +125,10 @@ class _PersonViewState extends State<PersonView> {
                         final person = items[index];
 
                         return Card(
-                          child: Padding(
+                          clipBehavior: Clip.antiAlias,
+                          child: InkWell(
+                            onTap: () => showPersonDetails(context, person),
+                            child: Padding(
                             padding: const EdgeInsets.all(12),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -180,7 +184,7 @@ class _PersonViewState extends State<PersonView> {
                               ],
                             ),
                           ),
-                        );
+                          ));
                       },
                     ),
             ),
